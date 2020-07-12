@@ -10,7 +10,8 @@ describe 'KYC::Kycaid::VerificationWorker' do
   end
   let(:user) { create(:user) }
   let!(:profile) { create(:profile, country: 'UA', state: 'submitted', applicant_id: '84e51f8a0677a646fd185fc741717ad9a8b3', user_id: user.id) }
-  let!(:document) { create(:document, identificator: '84e51f8a06', user_id: user.id) }
+  let!(:document) { create(:document, identificator: '84e51f8a06', doc_type: 'Passport', doc_category: 'front_side', user_id: user.id) }
+  let!(:document_second) { create(:document, identificator: '84e51f8a06', doc_type: 'Passport', doc_category: 'selfie', user_id: user.id) }
 
   describe 'successful verifications' do
     let(:successful_verification_response) { OpenStruct.new(status: 'completed', verifications: { document: { verified: true } }) }

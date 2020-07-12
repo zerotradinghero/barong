@@ -15,7 +15,7 @@ describe 'KYC::Kycaid::AddressWorker' do
   let(:address_params) { { "identificator": '84e51f8a06', 'user_id': document.user.id, "country": 'UA', "city": 'Kiev', "postcode": '101010' } }
 
   describe 'successful verification' do
-    let(:successful_docs_response) { OpenStruct.new(document_id: '84e51f8a0677a646fd185fc741717ad9a8b3') }
+    let(:successful_docs_response) { OpenStruct.new(address_id: '84e51f8a0677a646fd185fc741717ad9a8b3') }
     let(:successful_verification_response) { OpenStruct.new(verification_id: '84e51f8a0677a646fd185fc741717ad9a8b3') }
 
     before { allow(KYCAID::Address).to receive(:create).and_return(successful_docs_response) }
