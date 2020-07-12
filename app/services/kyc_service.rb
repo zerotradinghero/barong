@@ -25,17 +25,18 @@ class KycService
       return if document.doc_type == 'Address'
 
       user = document.user
-      user_document_label = user.labels.find_by(key: :document)
 
+      docs_batch_count = user.documents.where(identificator: document.identificator).count
+      return if Barong::App.config.kyc_provider == 'local'
+      return unless document.doc_type.in?(['Passport', 'Identity card', 'Driver license'])
+      return if REQUIRED_DOC_AMOUNT[document.doc_type] != docs_batch_count
+
+      user_document_label = user.labels.find_by(key: :document)
       if user_document_label.nil? # first document ever
         user.labels.create(key: :document, value: :pending, scope: :private)
       else
         user_document_label.update(value: :pending) # re-submitted document
       end
-
-      docs_batch_count = user.documents.where(identificator: document.identificator).count
-      return unless Barong::App.config.kyc_provider != 'local' ||
-        document.doc_type.in?(['Passport', 'Identity card', 'Driver license']) && REQUIRED_DOC_AMOUNT[document.doc_type] == docs_batch_count
 
       KYC.const_get(Barong::App.config.kyc_provider.capitalize, false)::DocumentWorker.perform_async(user.id, document.identificator) # docs verification worker
     end
