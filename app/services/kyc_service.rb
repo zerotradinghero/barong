@@ -2,7 +2,7 @@
 
 class KycService
   # passport front + selfie OR driver license front and back + selfie IR id card front and back + selfie
-  REQUIRED_DOC_AMOUNT = { 'PASSPORT': 2, 'DRIVERS_LICENSE': 3, 'GOVERNMENT_ID': 3 }.freeze
+  REQUIRED_DOC_AMOUNT = { 'Passport': 2, 'Driver license': 3, 'Identity card': 3 }.freeze
 
   class << self
     def profile_step(profile)
@@ -29,7 +29,7 @@ class KycService
       docs_batch_count = user.documents.where(identificator: document.identificator).count
       return if Barong::App.config.kyc_provider == 'local'
       return unless document.doc_type.in?(['Passport', 'Identity card', 'Driver license'])
-      return if REQUIRED_DOC_AMOUNT[document.doc_type] != docs_batch_count
+      return if REQUIRED_DOC_AMOUNT[document.doc_type.to_sym] != docs_batch_count
 
       user_document_label = user.labels.find_by(key: :document)
       if user_document_label.nil? # first document ever
