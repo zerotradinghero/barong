@@ -12,6 +12,7 @@ module KYC
         @applicant_id = @user.profiles.last.applicant_id
         @document = Document.find_by(identificator: @params[:identificator])
         address = ::KYCAID::Address.create(address_params)
+        Rails.logger.info("#{address}")
 
         if address.error || address.errors
           Rails.logger.info("Error in document creation for: #{@user.uid}: #{address.errors} #{address.error}")
@@ -19,6 +20,8 @@ module KYC
         elsif address.address_id
           @document.update(metadata: { address_id: address.address_id }.to_json)
           verification = ::KYCAID::Verification.create(verification_params)
+          Rails.logger.info("#{verification}")
+
           Rails.logger.info("Verification for user address with uid: #{@user.uid}, kycaid id of verification: #{verification.verification_id}")
         end
       end

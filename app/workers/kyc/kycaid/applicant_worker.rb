@@ -18,6 +18,7 @@ module KYC
         }
 
         applicant = ::KYCAID::Applicant.create(params)
+        Rails.logger.info("#{applicant}")
 
         # applicant error usually means unathorized
         # applicant errors is nil on correct request and contains a structure: (example)

@@ -10,6 +10,7 @@ module KYC
 
         user = Profile.find_by(applicant_id: params[:applicant_id]).user
         verification = ::KYCAID::Verification.fetch(params[:verification_id])
+        Rails.logger.info("#{verification}")
 
         return unless verification.status == 'completed'
 
