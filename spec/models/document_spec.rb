@@ -4,15 +4,18 @@
 #
 # Table name: documents
 #
-#  id         :bigint           not null, primary key
-#  user_id    :bigint           unsigned, not null
-#  upload     :string(255)
-#  doc_type   :string(255)
-#  doc_number :string(255)
-#  doc_expire :date
-#  metadata   :text(65535)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :bigint           not null, primary key
+#  user_id       :bigint           unsigned, not null
+#  upload        :string(255)
+#  doc_type      :string(255)
+#  doc_number    :string(255)
+#  doc_expire    :date
+#  identificator :string(255)
+#  metadata      :text(65535)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  doc_issue     :date
+#  doc_category  :string(255)
 #
 
 

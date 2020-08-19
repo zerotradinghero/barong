@@ -4,19 +4,21 @@
 #
 # Table name: profiles
 #
-#  id         :bigint           not null, primary key
-#  user_id    :bigint
-#  first_name :string(255)
-#  last_name  :string(255)
-#  dob        :date
-#  address    :string(255)
-#  postcode   :string(255)
-#  city       :string(255)
-#  country    :string(255)
-#  state      :integer          default("drafted"), unsigned
-#  metadata   :text(65535)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id           :bigint           not null, primary key
+#  user_id      :bigint
+#  author       :string(255)
+#  applicant_id :string(255)
+#  first_name   :string(255)
+#  last_name    :string(255)
+#  dob          :date
+#  address      :string(255)
+#  postcode     :string(255)
+#  city         :string(255)
+#  country      :string(255)
+#  state        :integer          default("drafted"), unsigned
+#  metadata     :text(65535)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 
 require 'rails_helper'
