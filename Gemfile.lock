@@ -139,7 +139,7 @@ GEM
       i18n (>= 1.6, < 2)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
-    ffi (1.12.2)
+    ffi (1.13.1)
     fog-aliyun (0.3.8)
       fog-core
       fog-json

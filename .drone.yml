@@ -48,6 +48,7 @@ steps:
       - 2-2-stable
       - 2-3-stable
       - 2-4-stable
+      - "integration/*"
 
 - name: Generate docs
   image: quay.io/openware/ruby-node:2.6.5
@@ -86,6 +87,7 @@ steps:
       - 2-2-stable
       - 2-3-stable
       - 2-4-stable
+      - "integration/*"
 
 - name: Redeploy on master.devkube.com
   image: rubykube/microkube:0.2.0
