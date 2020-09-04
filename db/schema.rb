@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_02_125225) do
+ActiveRecord::Schema.define(version: 2020_09_04_153034) do
 
   create_table "activities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -37,8 +37,8 @@ ActiveRecord::Schema.define(version: 2020_09_02_125225) do
     t.string "state", default: "active", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["kid"], name: "index_apikeys_on_kid", unique: true
     t.index ["key_holder_account_type", "key_holder_account_id"], name: "idx_apikey_on_account"
+    t.index ["kid"], name: "index_apikeys_on_kid", unique: true
   end
 
   create_table "comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
