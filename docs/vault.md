@@ -2,10 +2,14 @@
 
 ## Introduction
 
-This document describes how to create vault tokens in order to:
+This document describes how to create vault tokens in order to restrict components access to vault as following
 
-* configure *barong-rails* to be able to **encrypt** and **decrypt** api_key secrets
-* renew token and manage totp, to configure *barong-authz* to be able to **decrypt** api_key secrets, to **renew** token.
+| Component    | Abilities                                               |
+| ------------ | ------------------------------------------------------- |
+| barong-rails | encrypt api keys<br />create TOTP<br />verify TOTP code |
+| barong-authz | decrypt api keys                                        |
+
+
 
 ## Connect to vault
 
@@ -47,11 +51,6 @@ path "transit/keys/*" {
 
 # Encrypt engines secrets
 path "transit/encrypt/opendax_apikeys_*" {
-  capabilities = [ "create", "read", "update" ]
-}
-
-# Decrypt engines secrets
-path "transit/decrypt/opendax_apikeys_*" {
   capabilities = [ "create", "read", "update" ]
 }
 
