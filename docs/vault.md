@@ -2,7 +2,10 @@
 
 ## Introduction
 
-This document describe how to create vault tokens in order to configure **barong-rails** to be able **to encrypt** and **to decrypt** api_key secrets, **to renew** token and **to manage** totp, to configure **barong-authz** to be able **to decrypt** api_key secrets, **to renew** token.
+This document describes how to create vault tokens in order to:
+
+* configure *barong-rails* to be able to **encrypt** and **decrypt** api_key secrets
+* renew token and manage totp, to configure *barong-authz* to be able to **decrypt** api_key secrets, to **renew** token.
 
 ## Connect to vault
 
@@ -22,6 +25,7 @@ Cluster ID: 9f40327d-ec71-9655-b728-7588ce47d0b4
 
 High-Availability Enabled: false
 ```
+
 ## Create ACL groups
 
 ### Create the following policy files
