@@ -119,8 +119,11 @@ module API::V2
                    type: String,
                    allow_blank: false,
                    desc: 'User password'
+          requires :otp_code, type: String, allow_blank: false, desc: 'Code from Google Authenticator'
         end
         put '/password' do
+          verify_otp!
+
           unless params[:new_password] == params[:confirm_password]
             password_error!(reason: 'New passwords don\'t match',
               error_code: 422, user: current_user.id, action: 'password change', error_text: 'doesnt_match')

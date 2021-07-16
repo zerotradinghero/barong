@@ -53,7 +53,7 @@ Barong::App.define do |config|
   config.set(:session_expire_time, '1800', type: :integer)
   config.set(:kyc_provider, 'kycaid', values: %w[kycaid local])
   config.set(:required_docs_expire, 'true', type: :bool)
-  config.set(:doc_num_limit, '10', type: :integer)
+  config.set(:doc_num_limit, '3', type: :integer)
   config.set(:geoip_lang, 'en', values: %w[en de es fr ja ru])
   config.set(:csrf_protection, 'true', type: :bool)
   config.set(:apikey_nonce_lifetime, '5000', type: :integer)
