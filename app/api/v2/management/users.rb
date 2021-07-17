@@ -25,7 +25,7 @@ module API::V2
         def create_phone(user:, number:)
           return if number.blank?
 
-          phone = user.phones.create(number: number)
+          phone = user.phone.create(number: number)
           error!(phone.errors.full_messages, 422) unless phone.persisted?
           phone.update(validated_at: Time.current)
         end

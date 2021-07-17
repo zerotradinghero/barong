@@ -63,7 +63,7 @@ module API
 
         expose :profiles, using: Entities::Profile
         expose :labels, using: Entities::AdminLabelView
-        expose :phones, using: Entities::Phone
+        expose :phone, using: Entities::Phone
         expose :documents, using: Entities::Document
         expose :data_storages, using: Entities::DataStorage
         expose :comments, using: Entities::Comment

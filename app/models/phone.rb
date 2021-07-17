@@ -61,11 +61,11 @@ class Phone < ApplicationRecord
     end
   end
 
-  private
-
   def generate_code
     self.code = rand.to_s[2..6]
   end
+
+  private
 
   def parse_country
     data = Phonelib.parse(number)

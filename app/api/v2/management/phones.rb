@@ -24,7 +24,7 @@ module API::V2
           user = User.find_by(uid: params[:uid])
           error!('user.doesnt_exist', 422) unless user
 
-          present user.phones, with: API::V2::Management::Entities::Phone
+          present user.phone, with: API::V2::Management::Entities::Phone
         end
 
         desc 'Create phone number for user' do
@@ -42,9 +42,9 @@ module API::V2
           phone_number = Phone.international(params[:number])
           validate_phone!(phone_number)
 
-          error!('management.phone.exists', 400) if user.phones.find_by_number(phone_number)
+          error!('management.phone.exists', 400) if user.phone
 
-          phone = user.phones.create(number: params[:number], validated_at: Time.now)
+          phone = user.phone.create(number: params[:number], validated_at: Time.now)
           error!(phone.errors.full_messages, 422) if phone.errors.any?
 
           present phone, with: API::V2::Management::Entities::Phone
@@ -63,7 +63,7 @@ module API::V2
           error!('user.doesnt_exist', 422) unless user
 
           phone_number = Phone.international(params[:number])
-          phone = user.phones.find_by_number(phone_number) if phone_number.present?
+          phone = user.phone if phone_number.present?
           error!('management.phone.doesnt_exists', 422) unless phone
 
           present phone.destroy, with: API::V2::Management::Entities::Phone

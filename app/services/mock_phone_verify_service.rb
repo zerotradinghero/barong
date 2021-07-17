@@ -18,7 +18,9 @@ class MockPhoneVerifyService
 
     # always return true
     def verify_code?(number:, code:, user:)
-      user.phones.find_by_number(number).present?
+      return false if user.phone.nil?
+      
+      user.phone.number == number and user.phone.code == code
     end
   end
 end

@@ -22,7 +22,9 @@ class TwilioSmsSendService
 
     # returns true if given code matches number in DB
     def verify_code?(number:, code:, user:)
-      user.phones.find_by_number(number, code: code)
+      return false if user.phone.nil?
+      
+      user.phone.number == number and user.phone.code == code
     end
   end
 end

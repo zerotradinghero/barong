@@ -14,7 +14,7 @@ module KYC
           dob: profile.dob,
           residence_country: profile.country,
           email: profile.user.email,
-          phone: profile.user.phones&.last&.number
+          phone: profile.user.phone&.number
         }
 
         applicant = ::KYCAID::Applicant.create(params)
