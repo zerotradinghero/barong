@@ -6,8 +6,6 @@ class User < ApplicationRecord
 
   has_secure_password
 
-  belongs_to :person
-
   has_one   :phone
   has_many  :profiles,            dependent: :destroy
   has_many  :data_storages,       dependent: :destroy
