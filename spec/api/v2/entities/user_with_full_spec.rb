@@ -17,7 +17,7 @@ describe API::V2::Entities::UserWithKYC do
   it { expect(subject.state).to eq record.state }
   it { expect(subject.profiles).to eq record.profiles }
   it { expect(subject.labels).to eq record.labels }
-  it { expect(subject.phones).to eq record.phones }
+  it { expect(subject.phone).to eq record.phone }
   it { expect(subject.documents).to eq record.documents }
   it { expect(subject.to_h.keys).not_to include(:activities) }
 

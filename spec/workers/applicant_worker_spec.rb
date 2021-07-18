@@ -13,7 +13,7 @@ describe 'KYC::ApplicantWorker' do
   describe 'successful verification' do
     let(:successful_response) { OpenStruct.new(applicant_id: "84e51f8a0677a646fd185fc741717ad9a8b3") }
     let(:params) {{ type: 'PERSON', first_name: profile.first_name, last_name: profile.last_name, dob: profile.dob,
-                    residence_country: profile.country, email: profile.user.email, phone: profile.user.phones&.last&.number }}
+                    residence_country: profile.country, email: profile.user.email, phone: profile.user.phone&.number }}
 
     before { allow(KYCAID::Applicant).to receive(:create).with(params).and_return(successful_response)}
 
@@ -50,7 +50,7 @@ describe 'KYC::ApplicantWorker' do
     }
 
     let(:params) {{ type: 'PERSON', first_name: profile.first_name, last_name: profile.last_name, dob: profile.dob,
-                    residence_country: profile.country, email: profile.user.email, phone: profile.user.phones&.last&.number }}
+                    residence_country: profile.country, email: profile.user.email, phone: profile.user.phone&.number }}
 
     context 'unathorized' do
       before { allow(KYCAID::Applicant).to receive(:create).with(params).and_return(unauthorized_response)}

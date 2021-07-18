@@ -90,7 +90,7 @@ module API::V2
             user.update(role: 'superadmin', state: 'active')
             user.labels.create(key: 'email', value: 'verified', scope: 'private')
           else
-            publish_confirmation(user, Barong::App.config.domain)
+            publish_confirmation_code(user, "register", 'system.user.email.confirmation.code')
           end
 
           csrf_token = open_session(user)
@@ -211,12 +211,40 @@ module API::V2
 
             activity_record(user: current_user.id, action: 'request password reset', result: 'succeed', topic: 'password')
 
-            EventAPI.notify('system.user.password.reset.token',
-                            record: {
-                              user: current_user.as_json_for_event_api,
-                              domain: Barong::App.config.domain,
-                              token: token
-                            })
+            publish_confirmation_code(current_user, "reset_password", 'system.user.password.reset.code')
+            status 201
+          end
+
+          desc 'Check reset password token',
+            success: { code: 201, message: 'Check password reset code' },
+            failure: [
+              { code: 400, message: 'Required params are missing' },
+              { code: 422, message: 'Validation errors' }
+            ]
+          params do
+            requires :email,
+                     type: String,
+                     allow_blank: false,
+                     desc: 'Account email'
+            requires :code,
+                     type: String,
+                     allow_blank: false,
+                     desc: 'Code from email'
+          end
+          post '/check_code' do
+            current_user = User.find_by_email(params[:email])
+            response = management_api_request("post", "http://applogic:3000/api/management/users/verify/get", { type: "reset_password", email: current_user.email })
+
+            error!({ errors: ['identity.user.code_doesnt_exist'] }, 422) unless response.code.to_i == 200
+            applogic_code = JSON.parse(response.body.to_s)
+
+            error!({ errors: ['identity.user.out_of_attempts'] }, 422) if applogic_code["attempts"] >= 3
+
+            unless applogic_code["confirmation_code"] == params[:code]
+              management_api_request("put", "http://applogic:3000/api/management/users/verify", { type: "reset_password", email: current_user.email, attempts: applogic_code["attempts"] + 1 })
+
+              error!({ errors: ['identity.user.code_incorrect'] }, 422)
+            end
 
             status 201
           end

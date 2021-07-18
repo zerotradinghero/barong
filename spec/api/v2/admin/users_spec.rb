@@ -445,7 +445,7 @@ describe API::V2::Admin::Users do
         expect(json_body[:profiles][0][:address]).to eq experimental_user.profiles[0].address
         expect(json_body[:profiles][0][:dob]).to eq experimental_user.profiles[0].dob.to_s
         expect(json_body[:documents][0][:doc_number]).to eq experimental_user.documents[0].doc_number
-        expect(json_body[:phones][0][:number]).to eq experimental_user.phones[0].number
+        expect(json_body[:phone]).to eq experimental_user.phone.number
       end
     end
   end
@@ -1104,7 +1104,7 @@ describe API::V2::Admin::Users do
           expect(json_body[:profiles][0][:address]).to eq experimental_user.profiles[0].address
           expect(json_body[:profiles][0][:dob]).to eq experimental_user.profiles[0].dob.to_s
           expect(json_body[:documents][0][:doc_number]).to eq experimental_user.documents[0].doc_number
-          expect(json_body[:phones][0][:number]).to eq experimental_user.phones[0].number
+          expect(json_body[:phone][:number]).to eq experimental_user.phone.number
           expect(response.status).to eq 201
         end
       end
