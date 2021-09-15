@@ -19,7 +19,6 @@ module API
           end
 
           rescue_from Peatio::Auth::Error do |e|
-            # report_exception(e)
             error!({ errors: ['jwt.decode_and_verify'] }, 401)
           end
 

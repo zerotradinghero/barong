@@ -171,7 +171,15 @@ class User < ApplicationRecord
   end
 
   def as_payload
-    as_json(only: %i[uid username email referral_uid role level state])
+    {
+      uid: uid,
+      email: email,
+      username: username,
+      role: role,
+      level: level,
+      state: state,
+      referral_uid: referral_uid
+    }
   end
 
   def language
