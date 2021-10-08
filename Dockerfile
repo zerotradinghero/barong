@@ -1,4 +1,4 @@
-FROM ruby:2.6.6
+FROM ruby:2.7.3
 
 # By default image is built using RAILS_ENV=production.
 # You may want to customize it:
