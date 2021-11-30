@@ -26,6 +26,23 @@ module API::V2
 
           present user.phone, with: API::V2::Management::Entities::Phone
         end
+        
+        desc 'Send message to user phone numbers' do
+          @settings[:scope] = :send_phones
+        end
+        params do
+          requires :uid, type: String, desc: 'User uid', allow_blank: false
+          requires :content, type: String, desc: 'Message content', allow_blank: false
+        end
+        post '/send' do
+          user = User.find_by(uid: params[:uid])
+          error!('user.doesnt_exist', 422) unless user
+          error!('management.phone.doesnt_exists', 422) unless user.phone
+          
+          TwilioSmsSendService.send_sms(user.phone.number, params[:content])
+
+          present 200
+        end
 
         desc 'Create phone number for user' do
           @settings[:scope] = :write_phones
