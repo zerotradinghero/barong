@@ -39,7 +39,7 @@ module API::V2
           error!('user.doesnt_exist', 422) unless user
           error!('management.phone.doesnt_exists', 422) unless user.phone
           
-          TwilioSmsSendService.send_sms(user.phone.number, params[:content])
+          TwilioSmsSendService.send_sms(number: user.phone.number, content: params[:content])
 
           present 200
         end
