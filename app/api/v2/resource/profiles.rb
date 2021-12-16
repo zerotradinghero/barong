@@ -40,12 +40,11 @@ module API::V2
           optional :city, type: String, desc: 'City'
           optional :country, type: String, desc: 'Country'
           optional :metadata, type: String, desc: 'Any additional key: value pairs in json string format'
-          optional :confirm, type: Boolean, default: false, desc: 'Profile confirmation'
         end
 
         post do
           declared_params = declared(params.slice(*profile_param_keys), include_missing: false)
-          declared_params.merge!(state: 'submitted') if params['confirm']
+          declared_params.merge!(state: 'verified')
 
           profile = current_user.profiles.create(declared_params)
           code_error!(profile.errors.details, 422) if profile.errors.any?
@@ -69,7 +68,6 @@ module API::V2
           optional :city, type: String, desc: 'City'
           optional :country, type: String, desc: 'Country'
           optional :metadata, type: String, desc: 'Any additional key: value pairs in json string format'
-          optional :confirm, type: Boolean, default: false, desc: 'Profile confirmation'
         end
 
         put do
@@ -77,7 +75,7 @@ module API::V2
           return error!({ errors: ['resource.profile.doesnt_exist_or_not_editable'] }, 404) if target_profile.nil?
 
           declared_params = declared(params.slice(*profile_param_keys), include_missing: false)
-          declared_params.merge!(state: 'submitted') if params['confirm']
+          declared_params.merge!(state: 'verified')
 
           code_error!(target_profile.errors.details, 422) unless target_profile.update(declared_params)
 
