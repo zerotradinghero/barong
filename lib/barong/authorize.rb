@@ -55,7 +55,7 @@ module Barong
     def validate_session!
       unless @request.env['HTTP_USER_AGENT'] == session[:user_agent] &&
              Time.now.to_i < session[:expire_time] &&
-             find_ip.include?(remote_ip)
+             (find_ip.include?(remote_ip) || IPAddr.new(remote_ip).private?)
 
         # Delete session from additional redis list
         Barong::RedisSession.delete(session[:uid], session.id.to_s)
