@@ -72,7 +72,7 @@ module Barong
 
       # Update session key expiration date
       session[:expire_time] = Time.now.to_i + Barong::App.config.session_expire_time
-      Barong::RedisSession.update(session[:uid], session.id.to_s, session[:expire_time])
+      Barong::RedisSession.update(session[:uid], session, session[:expire_time])
     end
 
     def find_ip

@@ -18,11 +18,12 @@ module API::V2
           "user_ip": remote_ip,
           "user_agent": request.env['HTTP_USER_AGENT'],
           "expire_time": expire_time,
-          "csrf_token": csrf_token
+          "csrf_token": csrf_token,
+          "authenticated_at": Time.now
         )
 
         # Add current session key info in additional redis list
-        Barong::RedisSession.add(user.uid, session.id.to_s, expire_time)
+        Barong::RedisSession.add(user.uid, session, expire_time)
 
         csrf_token
       end

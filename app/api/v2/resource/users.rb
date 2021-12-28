@@ -63,6 +63,33 @@ module API::V2
           status(200)
         end
 
+        desc 'Return user active devices',
+          success: Entities::Session
+        params do
+          use :pagination_filters
+        end
+        get '/devices' do
+          sessions = Barong::RedisSession.get_all(current_user.uid)
+          sessions.map do |s|
+            s[:current_session] = s[:session_id].to_s == request.session.id.to_s
+
+            s
+          end
+
+          present paginate(sessions), with: Entities::Session
+        end
+
+        desc 'Delete user session',
+          success: { code: 200, message: 'The session was blocked' }
+        params do
+          requires :session_id, type: String, allow_blank: false, desc: 'Session id'
+        end
+        delete '/devices/:session_id' do
+          Barong::RedisSession.delete(current_user.uid, params[:session_id])
+
+          status(200)
+        end
+
         desc 'Returns user activity',
           success: Entities::Activity
         params do

@@ -62,7 +62,7 @@ module API::V2
           activity_record(user: current_user.id, action: 'enable 2FA', result: 'succeed', topic: 'otp')
 
           # Invalidate all user session except current
-          Barong::RedisSession.invalidate_all(current_user.uid, request.session.id.to_s)
+          Barong::RedisSession.invalidate_all(current_user.uid, request.session.id)
           200
         end
 

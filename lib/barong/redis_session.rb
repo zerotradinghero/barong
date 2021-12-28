@@ -12,10 +12,13 @@ module Barong
       "_session_id:2::#{hexdigest_session(session_id)}"
     end
 
-    def self.add(user_uid, session_id, expire_time)
-      key = key_name(user_uid, session_id)
+    def self.add(user_uid, session, expire_time)
+      key = key_name(user_uid, session.id)
       Rails.cache.fetch(key, expires_in: expire_time) {
-        encrypted_session(session_id)
+        session.merge!(
+          "session_id": session.id.to_s,
+          "encrypted": encrypted_session(session.id)
+        ).to_h.to_json
       }
     end
 
@@ -24,10 +27,32 @@ module Barong
       Rails.cache.delete(key)
     end
 
-    def self.update(user_uid, session_id, expire_time)
-      key = key_name(user_uid, session_id)
-      value = encrypted_session(session_id)
+    def self.update(user_uid, session, expire_time)
+      key = key_name(user_uid, session.id)
+      value = session.merge!(
+        "session_id": session.id.to_s,
+        "encrypted": encrypted_session(session.id)
+      ).to_h.to_json
       Rails.cache.write(key, value, expires_in: expire_time)
+    end
+
+    def self.get_all(user_uid)
+      sessions = []
+      session_keys = Rails.cache.redis.keys("#{user_uid}_session_*")
+      session_keys.each do |key|
+        value = Rails.cache.read(key)
+        value_parsed = JSON.parse(value)
+        session = {
+          session_id: value_parsed["session_id"],
+          user_ip: value_parsed["user_ip"],
+          user_agent: value_parsed["user_agent"],
+          authenticated_at: Time.parse(value_parsed["authenticated_at"]).utc,
+        }
+
+        sessions.push(session)
+      end
+
+      sessions
     end
 
     def self.invalidate_all(user_uid, session_id = nil)
