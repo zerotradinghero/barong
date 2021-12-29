@@ -22,8 +22,15 @@ module Barong
       }
     end
 
+    def self.get(user_uid, session_id)
+      key = key_name(user_uid, session_id)
+      Rails.cache.read(key)
+    end
+
     def self.delete(user_uid, session_id)
       key = key_name(user_uid, session_id)
+      value = Rails.cache.read(key)
+      Rails.cache.delete(value)
       Rails.cache.delete(key)
     end
 
@@ -31,7 +38,8 @@ module Barong
       key = key_name(user_uid, session.id)
       value = session.merge!(
         "session_id": session.id.to_s,
-        "encrypted": encrypted_session(session.id)
+        "encrypted": encrypted_session(session.id),
+        "last_login_at": Time.now,
       ).to_h.to_json
       Rails.cache.write(key, value, expires_in: expire_time)
     end
@@ -42,14 +50,23 @@ module Barong
       session_keys.each do |key|
         value = Rails.cache.read(key)
         value_parsed = JSON.parse(value)
-        session = {
-          session_id: value_parsed["session_id"],
-          user_ip: value_parsed["user_ip"],
-          user_agent: value_parsed["user_agent"],
-          authenticated_at: Time.parse(value_parsed["authenticated_at"]).utc,
-        }
+        expire_time = value_parsed["expire_time"].to_i
 
-        sessions.push(session)
+        if expire_time > Time.now.to_i
+          session = {
+            session_id: value_parsed["session_id"],
+            user_ip: value_parsed["user_ip"],
+            user_ip_country: value_parsed["user_ip_country"],
+            user_agent: value_parsed["user_agent"],
+            authenticated_at: Time.parse(value_parsed["authenticated_at"]).utc,
+            last_login_at: Time.parse(value_parsed["last_login_at"]).utc,
+          }
+  
+          sessions.push(session)
+        else
+          Rails.cache.delete(value)
+          Rails.cache.delete(key)
+        end
       end
 
       sessions

@@ -16,10 +16,12 @@ module API::V2
         session.merge!(
           "uid": user.uid,
           "user_ip": remote_ip,
+          "user_ip_country": Barong::GeoIP.info(ip: remote_ip, key: :country),
           "user_agent": request.env['HTTP_USER_AGENT'],
           "expire_time": expire_time,
           "csrf_token": csrf_token,
-          "authenticated_at": Time.now
+          "authenticated_at": Time.now,
+          "last_login_at": Time.now,
         )
 
         # Add current session key info in additional redis list

@@ -15,6 +15,12 @@ module API::V2
               desc: 'Session ip'
              }
 
+      expose :user_ip_country,
+             documentation: {
+              type: 'String',
+              desc: 'Session ip country'
+             }
+
       expose :user_agent,
              documentation: {
               type: 'String',
@@ -29,6 +35,7 @@ module API::V2
 
       with_options(format_with: :iso_timestamp) do
         expose :authenticated_at
+        expose :last_login_at
       end
 
     end

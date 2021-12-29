@@ -69,6 +69,14 @@ module Barong
         error!({ errors: ['authz.client_session_mismatch'] }, 401)
       end
 
+      unless Barong::RedisSession.get(session[:uid], session.id.to_s)
+        Rails.logger.debug("Session mismatch! not found in SessionStore")
+
+        session.destroy
+
+        error!({ errors: ['authz.client_session_mismatch'] }, 401)
+      end
+
 
       # Update session key expiration date
       session[:expire_time] = Time.now.to_i + Barong::App.config.session_expire_time
